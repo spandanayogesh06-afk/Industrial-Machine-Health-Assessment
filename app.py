@@ -161,10 +161,18 @@ def render_dashboard(model, model_filename, model_error) -> None:
         with status:
             st.markdown("**SYSTEM READINESS**")
             if model is not None:
-                st.success("Prediction model ready", icon=":material/check_circle:")
+                st.markdown(
+                    "<div class='readiness-status readiness-status--ready'>"
+                    "<span class='readiness-dot'></span><span>MODEL ONLINE</span></div>",
+                    unsafe_allow_html=True,
+                )
                 st.caption(f"Artifact: {model_filename}")
             else:
-                st.warning("Prediction model unavailable", icon=":material/warning:")
+                st.markdown(
+                    "<div class='readiness-status readiness-status--unavailable'>"
+                    "<span class='readiness-dot'></span><span>MODEL UNAVAILABLE</span></div>",
+                    unsafe_allow_html=True,
+                )
                 st.caption(model_error)
 
     st.markdown("### Assessment sequence")
@@ -488,7 +496,12 @@ def apply_styles() -> None:
         .st-key-dashboard-hero h1 { color: #f5f4ed; font-size: 2rem; }
         .st-key-dashboard-hero [data-testid="stMarkdownContainer"] p { color: #e0e5df; }
         .st-key-dashboard-hero [data-testid="stCaptionContainer"] p { color: #aebbb4; }
-        .st-key-dashboard-hero [data-testid="stAlert"] p { color: var(--ink); }
+        .readiness-status { display: inline-flex; align-items: center; gap: .55rem; margin: .25rem 0 .4rem; padding: .55rem .75rem; border: 1px solid transparent; border-radius: 5px; font-size: .76rem; font-weight: 800; }
+        .readiness-status--ready { background: #e7f0c5; border-color: #c4d98a; color: #31411b; }
+        .readiness-status--unavailable { background: #4a2c24; border-color: #92533f; color: #ffe3d8; }
+        .readiness-dot { width: .58rem; height: .58rem; flex: 0 0 .58rem; border-radius: 50%; }
+        .readiness-status--ready .readiness-dot { background: #6c8a2b; box-shadow: 0 0 0 3px rgba(108, 138, 43, .16); }
+        .readiness-status--unavailable .readiness-dot { background: #f28a68; box-shadow: 0 0 0 3px rgba(242, 138, 104, .16); }
         [data-testid="stForm"] { border-color: var(--line); border-radius: 5px; background: rgba(255, 255, 255, .92); }
         [data-testid="stFileUploaderDropzone"] { border: 1px dashed #aab7ae; border-radius: 5px; background: rgba(255, 255, 255, .65); }
         [data-testid="stAlert"] { border-radius: 5px; }
